@@ -41,7 +41,7 @@ const NewTweet = ({ tweetObj, isOwner }) => {
         </>
       ) : (
         <>
-          <h4>{tweetObj.text}</h4>
+          <h4>{editTweet}</h4>
           {isOwner && (
             <>
               <button onClick={onDelClick}>Delete</button>

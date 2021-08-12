@@ -11,7 +11,7 @@ const Home = ({ userObj }) => {
   useEffect(() => {
     dbServ
       .collection("twowitter")
-      .orderBy("createdAt", "desc")
+      .orderBy(`newTweetObj.createdAt`, "desc")
       .onSnapshot((snap) => {
         const tweetArray = snap.docs.map((doc) => ({
           id: doc.id,
@@ -23,46 +23,28 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    // const response = await fileAttach.map((file) => {
-    //   const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
-    //   return fileref.putString(file, "data_url");
-    // });
-
-    // 파일 여러개 업로드 Promise 이용
-    // const fileUploadHandle = async (file) => {
-    //   return new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
-    //       resolve(fileref.putString(file, "data_url"));
-    //     }, 200);
-    //   });
-    // };
     const response = await Promise.all(
       fileAttach.map((file) => {
         const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
         return fileref.putString(file, "data_url");
       })
     );
-    console.log(response);
 
-    const downUrl = await Promise.all(
+    const downLoadUrl = await Promise.all(
       response.map((res) => res.ref.getDownloadURL())
     );
 
-    console.log(downUrl);
+    const newTweetObj = {
+      text: newTweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      downLoadUrl,
+    };
 
-    // if (newTweet !== "") {
-    //   await dbServ.collection("twowitter").add({
-    //     text: newTweet,
-    //     createdAt: Date.now(),
-    //     creatorId: userObj.uid,
-    //   });
-    // } else {
-    //   console.log("메세지를 써주세요");
-    //   alert("3글자 이상 써주세요");
-    // }
-    // setNewTweet("");
+    await dbServ.collection("twowitter").add({ newTweetObj });
+
+    setNewTweet("");
+    setFileAttach([]);
   };
   const onChange = (event) => {
     const {
@@ -111,27 +93,31 @@ const Home = ({ userObj }) => {
         />
         <input type="file" accept="image/*" multiple onChange={onFileChange} />
         <input type="submit" value="tweet" />
+        {fileAttach &&
+          fileAttach.map((file, index) => (
+            <div key={index}>
+              <img
+                src={file}
+                key={index}
+                alt="업로드사진"
+                style={{ width: "50px", height: "50px" }}
+              />
+              <button name={file} onClick={onClearPhotoClick}>
+                업로드 취소
+              </button>
+            </div>
+          ))}
       </form>
-      {fileAttach.map((file, index) => (
-        <div key={index}>
-          <img
-            src={file}
-            key={index}
-            alt="업로드사진"
-            style={{ width: "200px", height: "100px" }}
+
+      <div>
+        {newTweets.map((tweet) => (
+          <NewTweet
+            key={tweet.id}
+            tweetObj={tweet.newTweetObj}
+            isOwner={tweet.creatorId === userObj.uid}
           />
-          <button name={file} onClick={onClearPhotoClick}>
-            업로드 취소
-          </button>
-        </div>
-      ))}
-      {newTweets.map((tweet) => (
-        <NewTweet
-          key={tweet.id}
-          tweetObj={tweet}
-          isOwner={tweet.creatorId === userObj.uid}
-        />
-      ))}
+        ))}
+      </div>
     </>
   );
 };
