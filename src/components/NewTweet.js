@@ -1,10 +1,7 @@
 import { dbServ } from "Fbase";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 
 const NewTweet = ({ tweetObj, isOwner }) => {
-  const redirectBack = useHistory();
-
   const [editor, setEditor] = useState(false);
   const [editTweet, setEditTweet] = useState(tweetObj.text);
   const onDelClick = async () => {
@@ -21,7 +18,6 @@ const NewTweet = ({ tweetObj, isOwner }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(tweetObj, editTweet);
     await dbServ.doc(`twowitter/${tweetObj.id}`).update({ text: editTweet });
     setEditor(false);
   };
