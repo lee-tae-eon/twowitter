@@ -23,21 +23,34 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(fileAttach);
-    const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
 
-    const fileUploadHandle = async (file) => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(fileref.putString(file, "data_url"));
-        }, 2000);
-      });
-    };
+    // const response = await fileAttach.map((file) => {
+    //   const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
+    //   return fileref.putString(file, "data_url");
+    // });
+
+    // 파일 여러개 업로드 Promise 이용
+    // const fileUploadHandle = async (file) => {
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
+    //       resolve(fileref.putString(file, "data_url"));
+    //     }, 200);
+    //   });
+    // };
     const response = await Promise.all(
-      fileAttach.map((file) => fileUploadHandle(file))
+      fileAttach.map((file) => {
+        const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
+        return fileref.putString(file, "data_url");
+      })
+    );
+    console.log(response);
+
+    const downUrl = await Promise.all(
+      response.map((res) => res.ref.getDownloadURL())
     );
 
-    console.log(response);
+    console.log(downUrl);
 
     // if (newTweet !== "") {
     //   await dbServ.collection("twowitter").add({
