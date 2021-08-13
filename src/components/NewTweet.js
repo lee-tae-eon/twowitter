@@ -1,14 +1,18 @@
-import { dbServ } from "Fbase";
+import { dbServ, storageServ } from "Fbase";
 import React, { useState } from "react";
 
-const NewTweet = ({ tweetObj, isOwner }) => {
+const NewTweet = ({ tweetObj, isOwner, tweetId }) => {
   const [editor, setEditor] = useState(false);
   const [editTweet, setEditTweet] = useState(tweetObj.text);
+
   const onDelClick = async () => {
     const ok = window.confirm("삭제 하시겠습니까?");
-
+    console.log(tweetObj.downLoadUrl);
     if (ok) {
-      await dbServ.doc(`twowitter/${tweetObj.id}`).delete();
+      await dbServ.doc(`twowitter/${tweetId}`).delete();
+      await tweetObj.downLoadUrl.map((img) =>
+        storageServ.refFromURL(img).delete()
+      );
     }
   };
 
@@ -42,6 +46,15 @@ const NewTweet = ({ tweetObj, isOwner }) => {
       ) : (
         <>
           <h4>{editTweet}</h4>
+          {tweetObj.downLoadUrl &&
+            tweetObj.downLoadUrl.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt=""
+                style={{ width: "50px", height: "50px" }}
+              />
+            ))}
           {isOwner && (
             <>
               <button onClick={onDelClick}>Delete</button>

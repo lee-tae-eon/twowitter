@@ -23,17 +23,20 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const response = await Promise.all(
-      fileAttach.map((file) => {
-        const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
-        return fileref.putString(file, "data_url");
-      })
-    );
 
-    const downLoadUrl = await Promise.all(
-      response.map((res) => res.ref.getDownloadURL())
-    );
+    let downLoadUrl = [];
+    if (fileAttach !== []) {
+      const response = await Promise.all(
+        fileAttach.map((file) => {
+          const fileref = storageServ.ref().child(`${userObj.uid}/${uuidv4()}`);
+          return fileref.putString(file, "data_url");
+        })
+      );
 
+      downLoadUrl = await Promise.all(
+        response.map((res) => res.ref.getDownloadURL())
+      );
+    }
     const newTweetObj = {
       text: newTweet,
       createdAt: Date.now(),
@@ -113,8 +116,9 @@ const Home = ({ userObj }) => {
         {newTweets.map((tweet) => (
           <NewTweet
             key={tweet.id}
+            tweetId={tweet.id}
             tweetObj={tweet.newTweetObj}
-            isOwner={tweet.creatorId === userObj.uid}
+            isOwner={tweet.newTweetObj.creatorId === userObj.uid}
           />
         ))}
       </div>
