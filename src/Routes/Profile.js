@@ -5,7 +5,7 @@ const Profile = ({ userObj, updateUser }) => {
   const [updateName, setUpdateName] = useState(userObj.displayName);
 
   const getMyTweet = async () => {
-    const tweets = await dbServ
+    await dbServ
       .collection("twowitter")
       .where("creatorId", "==", userObj.uid)
       .orderBy("createdAt", "desc")

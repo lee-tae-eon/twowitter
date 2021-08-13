@@ -3,9 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Nav = ({ isLoggedIn, userObj }) => {
+  // const redirectHome = useHistory();
   const onLogOutClick = () => {
     authServ.signOut();
-    window.location.replace("/");
+    // redirectHome.push("/");
+    window.location.reload();
   };
 
   return (
