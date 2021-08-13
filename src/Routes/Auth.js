@@ -8,7 +8,6 @@ import {
   faGoogle,
   faGithub,
 } from "@fortawesome/free-brands-svg-icons";
-import { MainColor } from "components/_variables";
 
 const AuthContainer = styled.div`
   display: flex;
@@ -49,7 +48,6 @@ const Auth = () => {
       provider = new fbInstance.auth.GoogleAuthProvider();
     }
     const data = await authServ.signInWithPopup(provider);
-    console.log(data);
   };
 
   return (

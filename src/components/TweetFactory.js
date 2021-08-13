@@ -1,6 +1,7 @@
 import { storageServ, dbServ } from "Fbase";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import PropTypes from "prop-types";
 
 const TweetFactory = ({ userObj }) => {
   const [newTweet, setNewTweet] = useState("");
@@ -97,6 +98,10 @@ const TweetFactory = ({ userObj }) => {
       </form>
     </>
   );
+};
+
+TweetFactory.propTypes = {
+  userObj: PropTypes.object.isRequired,
 };
 
 export default TweetFactory;

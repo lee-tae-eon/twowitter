@@ -3,6 +3,7 @@ import { dbServ } from "Fbase";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TweetFactory from "components/TweetFactory";
+import PropTypes from "prop-types";
 
 const HomeContainer = styled.div``;
 
@@ -38,6 +39,10 @@ const Home = ({ userObj }) => {
       </div>
     </HomeContainer>
   );
+};
+
+Home.propTypes = {
+  userObj: PropTypes.object.isRequired,
 };
 
 export default Home;

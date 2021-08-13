@@ -1,5 +1,6 @@
 import { dbServ, storageServ } from "Fbase";
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 const NewTweet = ({ tweetObj, isOwner, tweetId }) => {
   const [editor, setEditor] = useState(false);
@@ -64,6 +65,16 @@ const NewTweet = ({ tweetObj, isOwner, tweetId }) => {
       )}
     </div>
   );
+};
+
+NewTweet.propTypes = {
+  tweetObj: PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    downLoadUrl: PropTypes.array.isRequired,
+  }).isRequired,
+  isOwner: PropTypes.bool.isRequired,
+  tweetId: PropTypes.string.isRequired,
 };
 
 export default NewTweet;
