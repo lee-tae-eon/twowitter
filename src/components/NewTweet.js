@@ -7,7 +7,6 @@ const NewTweet = ({ tweetObj, isOwner, tweetId }) => {
 
   const onDelClick = async () => {
     const ok = window.confirm("삭제 하시겠습니까?");
-    console.log(tweetObj.downLoadUrl);
     if (ok) {
       await dbServ.doc(`twowitter/${tweetId}`).delete();
       await tweetObj.downLoadUrl.map((img) =>

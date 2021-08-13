@@ -9,16 +9,34 @@ function App() {
   useEffect(() => {
     authServ.onAuthStateChanged((user) => {
       if (user) {
-        setUserObj(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) => user.updateProfile(args),
+        });
       }
       setInit(true);
     });
   }, []);
 
+  const updateUser = () => {
+    const user = authServ.currentUser;
+
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: (args) => user.updateProfile(args),
+    });
+  };
+
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <AppRouter
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+          updateUser={updateUser}
+        />
       ) : (
         "파이어베이스 초기화중"
       )}

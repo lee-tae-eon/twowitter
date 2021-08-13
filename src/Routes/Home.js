@@ -11,14 +11,16 @@ const Home = ({ userObj }) => {
   useEffect(() => {
     dbServ
       .collection("twowitter")
-      .orderBy(`newTweetObj.createdAt`, "desc")
+      .orderBy("createdAt", "desc")
       .onSnapshot((snap) => {
         const tweetArray = snap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         setNewTweets(tweetArray);
+        console.log(tweetArray);
       });
+    return;
   }, []);
 
   const onSubmit = async (event) => {
@@ -44,7 +46,7 @@ const Home = ({ userObj }) => {
       downLoadUrl,
     };
 
-    await dbServ.collection("twowitter").add({ newTweetObj });
+    await dbServ.collection("twowitter").add(newTweetObj);
 
     setNewTweet("");
     setFileAttach([]);
@@ -117,8 +119,8 @@ const Home = ({ userObj }) => {
           <NewTweet
             key={tweet.id}
             tweetId={tweet.id}
-            tweetObj={tweet.newTweetObj}
-            isOwner={tweet.newTweetObj.creatorId === userObj.uid}
+            tweetObj={tweet}
+            isOwner={tweet.creatorId === userObj.uid}
           />
         ))}
       </div>
