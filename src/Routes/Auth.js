@@ -1,6 +1,41 @@
 import { authServ, fbInstance } from "Fbase";
 import React from "react";
 import AuthForm from "components/AuthForm";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTwitter,
+  faGoogle,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
+import { MainColor } from "components/_variables";
+
+const AuthContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const AuthSocialContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+`;
+
+const AuthButton = styled.button`
+  padding: 8px 13px;
+  width: 180px;
+  border-radius: 20px;
+  border: none;
+  background-color: skyblue;
+  font-weight: 600;
+  &:first-child {
+    background-color: #98a699;
+  }
+`;
 
 const Auth = () => {
   const onSocialClick = async (event) => {
@@ -18,17 +53,23 @@ const Auth = () => {
   };
 
   return (
-    <div>
+    <AuthContainer>
+      <FontAwesomeIcon
+        icon={faTwitter}
+        color={"#04aaff"}
+        size="2x"
+        style={{ marginBottom: 30 }}
+      />
       <AuthForm />
-      <div>
-        <button onClick={onSocialClick} name="github">
-          깃헙으로 로그인
-        </button>
-        <button onClick={onSocialClick} name="google">
-          구글로 로그인
-        </button>
-      </div>
-    </div>
+      <AuthSocialContainer>
+        <AuthButton onClick={onSocialClick} name="github">
+          Github로 로그인 <FontAwesomeIcon icon={faGithub} />
+        </AuthButton>
+        <AuthButton onClick={onSocialClick} name="google">
+          Google로 로그인 <FontAwesomeIcon icon={faGoogle} />
+        </AuthButton>
+      </AuthSocialContainer>
+    </AuthContainer>
   );
 };
 
