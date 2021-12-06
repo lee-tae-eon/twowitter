@@ -96,6 +96,9 @@ const AuthForm = () => {
       <SwitchAuth onClick={toggleAccount}>
         {newAccount ? "Sign In" : "Create Account"}
       </SwitchAuth>
+      <div>hello</div>
+      <div>hello</div>
+      <div>hello</div>
     </>
   );
 };
